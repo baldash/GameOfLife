@@ -30,9 +30,10 @@ def get_living_cells_coords(game_map):
 def color_cell(x, y, color=WHITE):
     draw_rectangle(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
 
-def draw_cells(cells):
+def draw_cells(map):
+    cells = get_living_cells_coords(map)
     for cell in cells:
-        color_cell(cell[0], cell[1])
+        color_cell(cell[1], cell[0])
 
 def draw_grid():
     global CELL_NB
@@ -41,22 +42,40 @@ def draw_grid():
             rec = Rectangle(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE)
             draw_rectangle_lines_ex(rec, GRID_THICKNESS, GRAY)
 
-def count_living_neigbours(x, y, cells):
-    pass
+def count_living_neigbours(x, y, map):
+    global CELL_NB
 
-def game_of_life(cells):
     neighbours = [
-        [-1,-1], 
-        [0, -1], 
-        [1, -1], 
-        [-1, 0], 
-        [1, 0], 
+        [-1,-1],
+        [0, -1],
+        [1, -1],
+        [-1, 0],
+        [1, 0],
         [-1, 1], 
-        [0, 1], 
+        [0, 1],
         [1, 1]
         ]
+    nb_neighbours = 0
+
+    for neighbour in neighbours:
+        if x + neighbour[0] > 0 and x + neighbour[0] < CELL_NB and y + neighbour[1] > 0 and y + neighbour[1] < CELL_NB:
+            nb_neighbours += map[y + neighbour[1]][x + neighbour[0]] == True
+
+    return nb_neighbours
+
+def game_of_life(map):
+    new_map = map.copy()
     
-    return cells
+    for y in range(0, len(map)):
+        for x in range(0, len(map[y])):
+            nb_neighbours = count_living_neigbours(x, y, map)
+            if nb_neighbours < 2:
+                new_map[y][x] = False
+            elif map[y][x] == True and nb_neighbours > 3:
+                new_map[y][x] = False
+            elif map[y][x] == False and nb_neighbours == 3:
+                new_map[y][x] = True
+    return new_map
 
 
 CELL_NB = (int)(WINDOW_SIZE / CELL_SIZE)
@@ -69,12 +88,12 @@ last_update_time = 0
 if (len(cells) > 0):
     init_window(WINDOW_SIZE, WINDOW_SIZE, WINDOW_TITLE)
     while not window_should_close():
-        if ((int)(get_time()) - last_update_time == 2):
-            last_update_time = (int)(get_time())
-            # cells = game_of_life(cells)
+        if (get_time() - last_update_time >= REFRESH_TIME):
+            last_update_time = get_time()
+            game_map = game_of_life(game_map)
         begin_drawing()
         clear_background(BLACK)
-        draw_cells(cells)
+        draw_cells(game_map)
         draw_grid()
         end_drawing()
     close_window()
