@@ -20,7 +20,7 @@ def load_cells():
                         splitted_coords = line.split()
                         cells.append([(int)(splitted_coords[0]), (int)(splitted_coords[1])])
                     else:
-                        print(f"error in file {INIT_FILE} at line {line_nb}:\n>>> {line}", file=sys.stderr)
+                        print(f"error in file {file} at line {line_nb}:\n>>> {line}", file=sys.stderr)
                 line_nb += 1
     
     return cells
