@@ -3,21 +3,25 @@ from params import *
 import numpy as np
 import re
 import sys
+import glob
 
 def load_cells():
     cells = []
     pattern = re.compile("^\\d+\\s+\\d+\\s*$")
     line_nb = 1
+    path = r'./'+ MAP_FILES_FOLDER + '/**/*.bld'
+    files = glob.glob(path, recursive=True)
 
-    with open(INIT_FILE, 'r') as file:
-        for line in file:
-            if (line[0] != "#" and len(line.strip()) > 0):
-                if pattern.match(line):
-                    splitted_coords = line.split()
-                    cells.append([(int)(splitted_coords[0]), (int)(splitted_coords[1])])
-                else:
-                    print(f"error in file {INIT_FILE} at line {line_nb}:\n>>> {line}", file=sys.stderr)
-            line_nb += 1
+    for file in files:
+        with open(file, 'r') as file:
+            for line in file:
+                if (line[0] != "#" and len(line.strip()) > 0):
+                    if pattern.match(line):
+                        splitted_coords = line.split()
+                        cells.append([(int)(splitted_coords[0]), (int)(splitted_coords[1])])
+                    else:
+                        print(f"error in file {INIT_FILE} at line {line_nb}:\n>>> {line}", file=sys.stderr)
+                line_nb += 1
     
     return cells
 
