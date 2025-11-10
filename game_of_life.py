@@ -1,11 +1,10 @@
 from pyray import *
 from params import *
+from draw_map import *
 import numpy as np
 import re
 import sys
 import glob
-
-CELL_NB = (int)(WINDOW_SIZE / CELL_SIZE)
 
 def load_cells():
     cells = []
@@ -28,7 +27,6 @@ def load_cells():
     return cells
 
 def create_map():
-    global CELL_NB
     game_map = np.empty(shape=(CELL_NB, CELL_NB))
     game_map.fill(False)
     return game_map
@@ -38,27 +36,7 @@ def update_map(game_map, cells):
         game_map[cell[1]][cell[0]] = True
     return game_map
 
-def get_living_cells_coords(game_map):
-    return np.transpose(np.nonzero(game_map == True))
-
-def color_cell(x, y, color=WHITE):
-    draw_rectangle(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
-
-def draw_cells(map):
-    cells = get_living_cells_coords(map)
-    for cell in cells:
-        color_cell(cell[1], cell[0])
-
-def draw_grid():
-    global CELL_NB
-    for y in range(0, CELL_NB):
-        for x in range(0, CELL_NB):
-            rec = Rectangle(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE)
-            draw_rectangle_lines_ex(rec, GRID_THICKNESS, GRAY)
-
 def count_living_neigbours(x, y, map):
-    global CELL_NB
-
     neighbours = [
         [-1,-1],
         [0, -1],
@@ -99,7 +77,6 @@ def play():
     last_update_time = 0
 
     if (len(cells) > 0):
-        #init_window(WINDOW_SIZE, WINDOW_SIZE, WINDOW_TITLE)
         while not window_should_close():
             if (get_time() - last_update_time >= REFRESH_TIME):
                 last_update_time = get_time()
