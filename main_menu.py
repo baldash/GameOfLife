@@ -10,13 +10,13 @@ exit = False
 
 init_window(MENU_SIZE + WINDOW_SIZE, WINDOW_SIZE, WINDOW_TITLE)
 while not window_should_close() and not exit:
-    begin_drawing()
-    clear_background(BLACK)
     if gui_button(play_button_shape, "Play"):
         gol.play()
     elif gui_button(edit_button_shape, "Edit"):
         editor.edit_map()
     elif gui_button(exit_button_shape, "Exit"):
         exit = True
+    begin_drawing()
+    clear_background(BLACK)
     end_drawing()
 close_window()
