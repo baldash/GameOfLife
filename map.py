@@ -2,6 +2,11 @@ import numpy as np
 from pyray import *
 from params import *
 
+def create_map():
+    game_map = np.empty(shape=(CELL_NB, CELL_NB))
+    game_map.fill(False)
+    return game_map
+
 def color_cell(x, y, color=WHITE):
     draw_rectangle(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE, color)
 

@@ -1,6 +1,6 @@
 from pyray import *
 from params import *
-from draw_map import *
+from map import *
 import numpy as np
 import re
 import sys
@@ -25,11 +25,6 @@ def load_cells():
                 line_nb += 1
     
     return cells
-
-def create_map():
-    game_map = np.empty(shape=(CELL_NB, CELL_NB))
-    game_map.fill(False)
-    return game_map
 
 def update_map(game_map, cells):
     for cell in cells:
