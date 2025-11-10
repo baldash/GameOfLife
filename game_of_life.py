@@ -5,6 +5,8 @@ import re
 import sys
 import glob
 
+CELL_NB = (int)(WINDOW_SIZE / CELL_SIZE)
+
 def load_cells():
     cells = []
     pattern = re.compile("^\\d+\\s+\\d+\\s*$")
@@ -89,23 +91,21 @@ def game_of_life(map):
                 new_map[y][x] = True
     return new_map
 
+def play():
+    cells = load_cells()
+    game_map = create_map()
+    game_map = update_map(game_map, cells)
 
-CELL_NB = (int)(WINDOW_SIZE / CELL_SIZE)
-cells = load_cells()
-game_map = create_map()
-game_map = update_map(game_map, cells)
+    last_update_time = 0
 
-last_update_time = 0
-
-if (len(cells) > 0):
-    init_window(WINDOW_SIZE, WINDOW_SIZE, WINDOW_TITLE)
-    while not window_should_close():
-        if (get_time() - last_update_time >= REFRESH_TIME):
-            last_update_time = get_time()
-            game_map = game_of_life(game_map)
-        begin_drawing()
-        clear_background(BLACK)
-        draw_cells(game_map)
-        draw_grid()
-        end_drawing()
-    close_window()
+    if (len(cells) > 0):
+        #init_window(WINDOW_SIZE, WINDOW_SIZE, WINDOW_TITLE)
+        while not window_should_close():
+            if (get_time() - last_update_time >= REFRESH_TIME):
+                last_update_time = get_time()
+                game_map = game_of_life(game_map)
+            begin_drawing()
+            clear_background(BLACK)
+            draw_cells(game_map)
+            draw_grid()
+            end_drawing()
