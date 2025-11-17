@@ -14,6 +14,7 @@ def load_cells():
     files = glob.glob(path, recursive=True)
 
     for file in files:
+        print(f"loading: {file}")
         with open(file, 'r') as file:
             for line in file:
                 if (line[0] != "#" and len(line.strip()) > 0):
