@@ -2,6 +2,7 @@ import ctypes
 from map import *
 
 # use gui message box to display errors
+last_pos = [-1,-1]
 
 def save_map(map, file_name):
     coords = get_living_cells_coords(map)
@@ -11,12 +12,14 @@ def save_map(map, file_name):
                 f.write(f"{coord[1]} {coord[0]}\n")
 
 def update_clicked_cell(map):
+    global last_pos
     mousePos = get_mouse_position()
     x = (int)(mousePos.x / CELL_SIZE)
     y = (int)(mousePos.y / CELL_SIZE)
 
-    if (0 <= y < len(map) and 0 <= x < len(map[y])):
-        map[y][x] = True
+    if  (x != last_pos[0] or y != last_pos[1]) and (0 <= y < len(map) and 0 <= x < len(map[y])):
+        map[y][x] = not map[y][x]
+        last_pos = [x,y]
     return map
 
 def edit_map():
