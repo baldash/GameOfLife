@@ -24,6 +24,14 @@ The maps format is **bld** and is simply written like this :
 To run the program simply use:  
 `python main_menu.py`
 
+## Docker
+
+You can also build and run the docker image like so (on linux or WSL):  
+```
+docker build -t game-of-life .
+docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix game-of-life
+```
+
 ## Language and libs
 
 - Python 3.13.7
