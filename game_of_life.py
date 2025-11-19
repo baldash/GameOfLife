@@ -1,7 +1,6 @@
 from pyray import *
 from params import *
 from map import *
-import numpy as np
 import re
 import sys
 import glob
@@ -69,15 +68,29 @@ def play():
     cells = load_cells()
     game_map = create_map()
     game_map = update_map(game_map, cells)
+    rt = REFRESH_TIME
+    text_size = measure_text(f"Refresh: {rt:.2f}s", 18)
+    paused = False
+    speed_down_button_shape = Rectangle(WINDOW_SIZE + (int)(MENU_SIZE / 2) - (int)(80 / 2), (int)(WINDOW_SIZE * 0.25), 20, 20)
+    speed_up_button_shape = Rectangle(WINDOW_SIZE + (int)(MENU_SIZE / 2) + 20, (int)(WINDOW_SIZE * 0.25), 20, 20)
+    pause_button_shape = Rectangle(WINDOW_SIZE + (int)(MENU_SIZE / 2) - (int)(80 / 2), (int)(WINDOW_SIZE / 2), 80, 40)
 
     last_update_time = 0
 
     if (len(cells) > 0):
         while not window_should_close():
-            if (get_time() - last_update_time >= REFRESH_TIME):
+            if not paused and (get_time() - last_update_time >= rt):
                 last_update_time = get_time()
                 game_map = game_of_life(game_map)
             begin_drawing()
+            draw_text(f"Refresh: {rt:.2f}", WINDOW_SIZE + (int)(MENU_SIZE / 2) - (int)(text_size / 2), (int)(WINDOW_SIZE * 0.20), 18, WHITE)
+            if gui_button(pause_button_shape, "Pause"):
+                paused = not paused
+                last_update_time = 0
+            elif gui_button(speed_up_button_shape, "+"):
+                rt = min(MAX_REFRESH_TIME, rt + TIME_INCREMENT)
+            elif gui_button(speed_down_button_shape, "-"):
+                rt = max(TIME_INCREMENT, rt - TIME_INCREMENT)
             clear_background(BLACK)
             draw_cells(game_map)
             draw_grid()
