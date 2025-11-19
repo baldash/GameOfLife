@@ -1,7 +1,6 @@
 import ctypes
 from map import *
 
-# use gui message box to display errors
 last_pos = [-1,-1]
 
 def save_map(map, file_name):
@@ -10,6 +9,8 @@ def save_map(map, file_name):
         with open(f"{MAP_FILES_FOLDER}/{file_name}.bld", "w") as f:
             for coord in coords:
                 f.write(f"{coord[1]} {coord[0]}\n")
+    else:
+        print("error: trying to save to empty file name") # use gui message box to display errors in the future
 
 def update_clicked_cell(map):
     global last_pos
