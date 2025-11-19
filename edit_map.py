@@ -1,4 +1,3 @@
-import ctypes
 from map import *
 
 last_pos = [-1,-1]
